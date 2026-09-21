@@ -23,6 +23,8 @@ TEXT_EXT = {".js", ".jsx", ".ts", ".tsx", ".mjs", ".cjs", ".vue", ".svelte", ".p
             ".env", ".md", ".txt", ".sh", ".cfg", ".ini"}
 SERVER_PATH = re.compile(r"(^|/)(api|server|backend|functions|supabase/functions|netlify/functions|routes|lib/server)/"
                          r"|\.server\.[a-z]+$|(^|/)route\.[jt]s$")
+# 会被打包进浏览器的代码
+WEB_EXT = {".js", ".jsx", ".ts", ".tsx", ".mjs", ".cjs", ".vue", ".svelte", ".html"}
 PUBLIC_PREFIX = re.compile(r"\b(NEXT_PUBLIC_|VITE_|REACT_APP_|EXPO_PUBLIC_|NUXT_PUBLIC_|PUBLIC_)"
                            r"([A-Z0-9_]*(SECRET|SERVICE_ROLE|PRIVATE|OPENAI|ANTHROPIC|CLAUDE|STRIPE_SECRET|DATABASE_URL)[A-Z0-9_]*)")
 
@@ -42,6 +44,8 @@ def files(root):
         for d, dirs, fs in os.walk(root):
             dirs[:] = [x for x in dirs if x not in SKIP_DIRS]
             lst += [os.path.relpath(os.path.join(d, f), root) for f in fs]
+    # .env 通常被忽略，git 列不出来；但公开前缀的变量最常写在这里，要另外读进来（密钥扫描本来就跳过它们）
+    lst += [n for n in os.listdir(root) if is_env_file(n) and n not in lst]
     return [f for f in lst if not (set(f.split("/")) & SKIP_DIRS)
             and (os.path.splitext(f)[1] in TEXT_EXT or os.path.basename(f).startswith(".env"))]
 
@@ -129,14 +133,14 @@ def main():
     else:
         yellow.append("项目不是 git 项目，无法检查历史 —— 建议先跑 safe-start")
 
-    # 3. 前端暴露
-    pub = sorted({m.group(0) for t in texts.values() for m in PUBLIC_PREFIX.finditer(t)})
+    # 3. 前端暴露。只看会进浏览器的代码和 .env —— Python、文档里提到变量名不算
+    web = {f: t for f, t in texts.items() if os.path.splitext(f)[1] in WEB_EXT or is_env_file(f)}
+    pub = sorted({m.group(0) for t in web.values() for m in PUBLIC_PREFIX.finditer(t)})
     if pub:
         red.append(f"这些环境变量名带着「公开前缀」，会被打包进网页，任何人按 F12 都看得到：{', '.join(pub)}。"
                    "敏感密钥不能加这个前缀，要改成只在后端使用")
-    browser_ai = [f for f, t in texts.items() if "dangerouslyAllowBrowser" in t
-                  or (re.search(r"api\.(openai|anthropic)\.com", t) and not SERVER_PATH.search(f)
-                      and os.path.splitext(f)[1] in {".js", ".jsx", ".ts", ".tsx", ".vue", ".svelte", ".html"})]
+    browser_ai = [f for f, t in web.items() if not is_env_file(f) and not SERVER_PATH.search(f)
+                  and ("dangerouslyAllowBrowser" in t or re.search(r"api\.(openai|anthropic)\.com", t))]
     if browser_ai:
         red.append(f"浏览器端代码直接调用 AI 服务：{', '.join(browser_ai[:5])} —— 密钥会暴露、会被盗刷。改成经过后端调用，并加每日次数上限")
 

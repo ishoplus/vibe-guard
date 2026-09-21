@@ -369,6 +369,22 @@ class Scripts(unittest.TestCase):
             self.assertIn(s, r.stdout)
         self.assertNotIn("users", r.stdout.split("没有开启 RLS")[1].split("\n")[0])
 
+    def test_precheck_no_false_positive_for_backend_and_docs(self):
+        """Python 后端、文档里提到这些字眼不算浏览器暴露（在 vibe-guard 自己的仓库上踩到的误报）。"""
+        d = make_repo()
+        write(os.path.join(d, "server.py"), 'client = OpenAI(dangerouslyAllowBrowser=False)  # "api.openai.com"\n')
+        write(os.path.join(d, "README.md"), "不要用 VITE_OPENAI_API_KEY 这种名字\n")
+        os.makedirs(os.path.join(d, "api"))
+        write(os.path.join(d, "api", "chat.ts"), 'fetch("https://api.openai.com/v1/chat")\n')  # 后端路由
+        r = self.sh(self.PRECHECK, d)
+        self.assertEqual(r.returncode, 0, r.stdout)
+
+    def test_precheck_public_prefix_in_env_file(self):
+        d = make_repo()
+        write(os.path.join(d, ".env"), "NEXT_PUBLIC_OPENAI_KEY=abc\n")
+        r = self.sh(self.PRECHECK, d)
+        self.assertIn("NEXT_PUBLIC_OPENAI_KEY", r.stdout)
+
     def test_snapshot_runs(self):
         d = make_repo()
         write(os.path.join(d, "a.js"), "try { x() } catch (e) {}\nconsole.log(1)\n// TODO\n")

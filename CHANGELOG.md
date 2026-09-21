@@ -1,5 +1,11 @@
 # 更新记录
 
+## 0.6.2 — 2026-09-21
+- 公开发布到 https://github.com/ishoplus/vibe-guard ，安装来源改为 `ishoplus/vibe-guard`
+- 清单补上 homepage、repository；作者改为 ishoplus，不再公开邮箱
+- 修复 ship-check 误报：Python 后端、文档里提到 `VITE_…` 变量名或 `dangerouslyAllowBrowser` 时，被当成浏览器端暴露（用 ship-check 检查 vibe-guard 自己的仓库时发现）
+- 修复 ship-check 漏报：被 .gitignore 忽略的 `.env` 没被检查，里面 `NEXT_PUBLIC_` / `VITE_` 开头的敏感变量查不出来
+
 ## 0.6.1 — 2026-09-21
 - 新增 `docs/开发与发布.md`：本地开发、测试、发版、使用者升级（重载与升级行为在 CC 与 Codex 上实测）
 - 新增 `scripts/bump_version.py`：三个清单的版本号一起改

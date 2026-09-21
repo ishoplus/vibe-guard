@@ -109,16 +109,16 @@ plugins/vibe-guard/
 **Claude Code**
 
 ```bash
-claude --plugin-dir ~/projects/vibe-guard/plugins/vibe-guard     # 本机试用
+claude --plugin-dir <本机仓库>/plugins/vibe-guard     # 从源码试用（开发时用）
 # 或
-/plugin marketplace add ~/projects/vibe-guard
+/plugin marketplace add ishoplus/vibe-guard
 /plugin install vibe-guard@vibe-guard
 ```
 
 **Codex**
 
 ```bash
-codex plugin marketplace add ~/projects/vibe-guard
+codex plugin marketplace add ishoplus/vibe-guard
 codex plugin add vibe-guard@vibe-guard
 ```
 
@@ -171,13 +171,13 @@ codex plugin add vibe-guard@vibe-guard
 ## 测试
 
 ```bash
-python3 -m unittest discover -s tests -v   # 76 个确定性测试：两种模式的校验一致且资深模式提示更短、说明库每条都有四段和风险等级、引用的条目真实存在、4 个 hook（CC 与 Codex 两种输入）、部署闸门、6 个脚本（含本机假网站测冒烟测试）、结构规范
+python3 -m unittest discover -s tests -v   # 80 个确定性测试：两种模式的校验一致且资深模式提示更短、说明库每条都有四段和风险等级、引用的条目真实存在、4 个 hook（CC 与 Codex 两种输入）、部署闸门、6 个脚本（含本机假网站测冒烟测试）、结构规范
 claude plugin validate .                   # marketplace 清单
 claude plugin validate plugins/vibe-guard  # plugin 清单
 python3 ~/.codex/skills/.system/plugin-creator/scripts/validate_plugin.py plugins/vibe-guard   # Codex 清单
 ```
 
-**还没有的**：skill 触发准确度与流程遵循度的 eval。按 `~/projects/agent-harness-standards/agent-eval-spec.md`，eval 案例必须有真实来源，要等真实的新手用户用过、积累了失败案例之后再建。
+**还没有的**：skill 触发准确度与流程遵循度的 eval。eval 案例必须有真实来源（不收凭空设计的案例），要等真实的新手用户用过、积累了失败案例之后再建。
 
 ## 已知限制
 

@@ -1,9 +1,11 @@
 {
   "name": "vibe-guard",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "description": "给没有 CS 背景的人用的 vibe coding 护栏：需求访谈、安全开局、小步开发、调试救援、白话解释、项目体检、上线检查、部署指引、出事急救九个技能，加上密钥拦截、危险命令确认、部署闸门、停下时存档四道护栏。",
   "author": {
-    "name": "showang",
-    "email": "ishoplus@gmail.com"
-  }
+    "name": "ishoplus"
+  },
+  "homepage": "https://github.com/ishoplus/vibe-guard",
+  "repository": "https://github.com/ishoplus/vibe-guard",
+  "license": "MIT"
 }
