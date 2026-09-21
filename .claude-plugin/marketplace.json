@@ -9,7 +9,7 @@
       "description": "给没有 CS 背景的人用的 vibe coding 护栏：九个技能 + 四道护栏",
       "source": "./plugins/vibe-guard",
       "category": "productivity",
-      "version": "0.6.0"
+      "version": "0.6.1"
     }
   ]
 }

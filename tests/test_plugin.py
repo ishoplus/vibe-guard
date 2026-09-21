@@ -933,8 +933,25 @@ class Structure(unittest.TestCase):
     def test_manifests_agree(self):
         cc = json.loads(read(os.path.join(ROOT, ".claude-plugin", "plugin.json")))
         cx = json.loads(read(os.path.join(ROOT, ".codex-plugin", "plugin.json")))
+        mk = json.loads(read(os.path.join(ROOT, "..", "..", ".claude-plugin", "marketplace.json")))
+        entry = [p for p in mk["plugins"] if p["name"] == "vibe-guard"][0]
         self.assertEqual((cc["name"], cc["version"]), (cx["name"], cx["version"]))
+        self.assertEqual(entry["version"], cc["version"], "marketplace 里的版本号要和 plugin.json 一致")
         self.assertNotIn("hooks", cx)  # 不写就走默认 hooks/hooks.json，两边共用同一份
+
+    def test_bump_version_script(self):
+        import shutil
+        repo = os.path.abspath(os.path.join(ROOT, "..", ".."))
+        tmp = tempfile.mkdtemp()
+        for rel in ("scripts", "plugins/vibe-guard/.claude-plugin", "plugins/vibe-guard/.codex-plugin", ".claude-plugin"):
+            shutil.copytree(os.path.join(repo, rel), os.path.join(tmp, rel))
+        script = os.path.join(tmp, "scripts", "bump_version.py")
+        r = subprocess.run([sys.executable, script, "9.8.7"], capture_output=True, text=True)
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        for rel in ("plugins/vibe-guard/.claude-plugin/plugin.json", "plugins/vibe-guard/.codex-plugin/plugin.json",
+                    ".claude-plugin/marketplace.json"):
+            self.assertIn('"9.8.7"', read(os.path.join(tmp, rel)), rel)
+        self.assertNotEqual(subprocess.run([sys.executable, script, "v1"], capture_output=True).returncode, 0)
 
     def test_hooks_json_paths_exist(self):
         cfg = json.loads(read(os.path.join(HOOKS, "hooks.json")))

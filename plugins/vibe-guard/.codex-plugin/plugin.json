@@ -1,6 +1,6 @@
 {
   "name": "vibe-guard",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "给没有 CS 背景的人用的 vibe coding 护栏：九个技能加上密钥拦截、危险命令确认、部署闸门、停下时存档四道护栏。",
   "author": {
     "name": "showang",
