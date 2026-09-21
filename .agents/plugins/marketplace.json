@@ -1,0 +1,20 @@
+{
+  "name": "vibe-guard",
+  "interface": {
+    "displayName": "vibe-guard"
+  },
+  "plugins": [
+    {
+      "name": "vibe-guard",
+      "source": {
+        "source": "local",
+        "path": "./plugins/vibe-guard"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

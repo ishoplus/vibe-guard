@@ -1,0 +1,19 @@
+# 推送到 GitHub 时自动安装依赖、跑测试
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"  # 改成项目实际用的 Python 版本
+          cache: pip
+      - run: pip install -r requirements.txt
+      - run: pip install pytest
+      - run: pytest               # 改成项目实际的测试命令

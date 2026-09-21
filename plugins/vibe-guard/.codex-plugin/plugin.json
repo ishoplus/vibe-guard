@@ -1,0 +1,25 @@
+{
+  "name": "vibe-guard",
+  "version": "0.6.0",
+  "description": "给没有 CS 背景的人用的 vibe coding 护栏：九个技能加上密钥拦截、危险命令确认、部署闸门、停下时存档四道护栏。",
+  "author": {
+    "name": "showang",
+    "email": "ishoplus@gmail.com"
+  },
+  "license": "MIT",
+  "keywords": ["beginner", "vibe-coding", "guardrails", "security"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "vibe-guard",
+    "shortDescription": "新手 vibe coding 护栏",
+    "longDescription": "给没有工程背景的人用：需求访谈、安全开局、小步开发、调试救援、白话解释、项目体检、上线检查、部署指引、出事急救九个技能，外加拦截密钥写进代码、危险命令先确认、上线前检查闸门、停下时存档。",
+    "developerName": "showang",
+    "category": "Productivity",
+    "capabilities": ["Interactive", "Write"],
+    "defaultPrompt": [
+      "我想做一个小工具，帮我先把需求问清楚",
+      "又坏了，帮我找原因",
+      "准备上线了，帮我检查一遍"
+    ]
+  }
+}

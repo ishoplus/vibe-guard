@@ -1,0 +1,26 @@
+# 密钥（真实值只放这里，永远不上传）
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+# 依赖包（可以重新下载，体积大）
+node_modules/
+.venv/
+venv/
+__pycache__/
+# 构建产物（可以重新生成）
+dist/
+build/
+.next/
+.nuxt/
+.svelte-kit/
+.vercel/
+.netlify/
+# vibe-guard 的本机状态（上线检查结果、部署记录）
+.vibe-guard/
+# 系统与编辑器垃圾文件
+.DS_Store
+Thumbs.db
+.idea/
+*.log

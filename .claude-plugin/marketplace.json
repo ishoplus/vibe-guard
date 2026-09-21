@@ -1,0 +1,15 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "vibe-guard",
+  "description": "vibe-guard 本地 marketplace",
+  "owner": { "name": "showang", "email": "ishoplus@gmail.com" },
+  "plugins": [
+    {
+      "name": "vibe-guard",
+      "description": "给没有 CS 背景的人用的 vibe coding 护栏：九个技能 + 四道护栏",
+      "source": "./plugins/vibe-guard",
+      "category": "productivity",
+      "version": "0.6.0"
+    }
+  ]
+}

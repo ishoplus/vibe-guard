@@ -1,0 +1,20 @@
+# 推送到 GitHub 时自动安装依赖、跑检查和测试
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20        # 改成项目实际用的 Node 版本
+          cache: npm
+      - run: npm ci
+      - run: npm run lint --if-present
+      - run: npm test             # 改成项目实际的测试命令
+      - run: npm run build --if-present
